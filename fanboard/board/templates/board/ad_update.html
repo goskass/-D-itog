@@ -1,0 +1,17 @@
+{% extends 'board/default.html' %}
+{% load custom_filters %}
+{% load static %}
+
+{% block content %}
+    <h2>Редактирование объявления</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Принять</button>
+    </form>
+
+    <script src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+    <script>
+        CKEDITOR.replace('{{ form.text.auto_id }}');
+    </script>
+{% endblock %}

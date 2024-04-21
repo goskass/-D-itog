@@ -1,0 +1,16 @@
+{% extends 'board/default.html' %}
+{% load custom_filters %}
+{% load static %}
+
+{% block content %}
+  <h2>Удаление</h2>
+
+  <p>Ты точно хочешь удалить?</p>
+
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Удалить</button>
+  </form>
+
+<a href="{% url 'ad_list' %}">Отмена</a>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'board/default.html' %}
+{% load custom_filters %}
+{% load static %}
+
+{% block content %}
+
+
+    <h2>Список объявлений</h2>
+
+    {% for ad in ads %}
+        <div style="border: 1px solid #ddd; padding: 10px; margin-bottom: 20px;">
+
+            <p><strong>Заголовок:</strong> {{ ad.title }}</p>
+            <p><strong>Текст:</strong></p>
+            <div>{{ ad.text | safe }}</div>
+
+            {% if ad.image %}
+
+                <img src="{{ ad.image.url }}" alt="{{ ad.title }}" style="max-width: 100%; margin-top: 10px;">
+            {% endif %}
+
+            {% if ad.video %}
+
+                <video width="100%" controls style="margin-top: 10px;">
+                    <source src="{{ ad.video.url }}" type="video/mp4">
+                    Ваш браузер не поддерживает видео.
+                </video>
+            {% endif %}
+
+
+            <a href="{% url 'ad_detail' ad.pk %}"class="btn btn-primary">Подробнее</a>
+
+        </div>
+    {% endfor %}
+
+    {% if page_obj.has_previous %}
+        <a href="?page=1">1</a>
+        {% if page_obj.previous_page_number != 1 %}
+            ...
+            <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+        {% endif %}
+    {% endif %}
+
+    {{ page_obj.number }}
+
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+        {% if paginator.num_pages != page_obj.next_page_number %}
+            ...
+            <a href="?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+

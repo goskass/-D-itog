@@ -1,0 +1,13 @@
+
+{% load static %}
+
+{% block content %}
+    <h2>Отклик на объявление "{{ ad.title }}"</h2>
+    <p>Дата и время отклика: {{ response.created_at }}</p>
+    <p>Пользователь отклика: {{ response_user.username }}</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Отправить отклик</button>
+    </form>
+{% endblock %}

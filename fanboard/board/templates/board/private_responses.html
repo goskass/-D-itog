@@ -1,0 +1,67 @@
+{% extends 'board/default.html' %}
+{% load static %}
+
+{% block content %}
+    <h2>Приватная страница с откликами</h2>
+
+    <form method="get" action="">
+        <select name="ad">
+            <option value="">Выберите объявление</option>
+            {% for ad in user_ads %}
+                <option value="{{ ad.pk }}" {% if ad.pk == selected_ad %}selected{% endif %}>{{ ad.title }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Применить фильтр</button>
+    </form>
+
+    <form method="get">
+        <label for="date">Дата:</label>
+        <input type="date" id="date" name="date">
+        <button type="submit">Применить фильтр</button>
+    </form>
+
+    <ul>
+        {% for response in responses %}
+            <li>
+                <p>Объявление: {{ response.ad.title }}</p>
+                <p>Текст отклика: {{ response.text }}</p>
+
+                {% if response.is_approved %}
+                    <p style="color: green;">Принят</p>
+                {% endif %}
+
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="delete" value="{{ response.id }}">Удалить</button>
+                </form>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="accept" value="{{ response.id }}">Принять</button>
+                </form>
+            </li>
+        {% empty %}
+            <li>У вас нет откликов.</li>
+        {% endfor %}
+    </ul>
+
+    {% if page_obj.has_previous %}
+        <a href="?page=1">1</a>
+        {% if page_obj.previous_page_number != 1 %}
+            ...
+            <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+        {% endif %}
+    {% endif %}
+
+    {{ page_obj.number }}
+
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+        {% if paginator.num_pages != page_obj.next_page_number %}
+            ...
+            <a href="?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+

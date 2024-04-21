@@ -1,0 +1,39 @@
+{% extends 'board/default.html' %}
+{% load custom_filters %}
+{% load static %}
+
+{% block content %}
+    <div style="border: 1px solid #ddd; padding: 10px; margin-bottom: 20px;">
+        <p><strong>Категория:</strong> {{ ad.category }}</p>
+        <p><strong>Пользователь:</strong> {{ ad.user.username }}</p>
+        <h2 style="display: inline;">{{ ad.title }}</h2>
+
+        {% if user.is_authenticated %}
+        <a href="{% url 'create_response' ad_id=ad.pk %}" class="btn btn-danger" style="margin-left: 10px; vertical-align: middle;">Отклик</a> <!-- Кнопка "Отклик" -->
+        {% endif %}
+        <p><strong>Текст:</strong></p>
+        <div>{{ ad.text | safe }}</div>
+
+        {% if ad.image %}
+            <img src="{{ ad.image.url }}" alt="{{ ad.title }}" style="max-width: 100%; margin-top: 10px;">
+        {% endif %}
+
+        {% if ad.video %}
+            <video width="100%" controls style="margin-top: 10px;">
+                <source src="{{ ad.video.url }}" type="video/mp4">
+                Ваш браузер не поддерживает видео.
+            </video>
+        {% endif %}
+
+        <p><strong>Дата создания поста:</strong> {{ ad.created_at }}</p>
+        <ul style="list-style-type: none;">
+            {% if ad.user == user %}
+                <li><a href="{% url 'ad_update' pk=ad.pk %}" class="btn btn-primary">Редактировать</a></li>
+                <li><a href="{% url 'ad_delete' pk=ad.pk %}" class="btn btn-danger">Удалить</a></li>
+            {% endif %}
+            <li><a href="{% url 'ad_list' %}">Вернуться к списку объявлений</a></li>
+        </ul>
+    </div>
+{% endblock %}
+
+
